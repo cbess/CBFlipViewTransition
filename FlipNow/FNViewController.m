@@ -15,16 +15,11 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *oneImageView;
 @property (weak, nonatomic) IBOutlet UIImageView *twoImageView;
-@property (nonatomic, weak) IBOutlet UIView *containerView;
 @property (nonatomic, strong) CBFlipViewTransition *flipViewTransition;
 
 @end
 
 @implementation FNViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
 
 - (IBAction)flipButtonPressed:(id)sender {
     self.flipViewTransition = [CBFlipViewTransition new];
@@ -40,7 +35,7 @@
     self.flipViewTransition.zDistance = 700;
     self.flipViewTransition.endingCenter = (_flipped ? self.oneImageView.center : self.twoImageView.center);
     self.flipViewTransition.flipDirection = (_flipped ? CBFlipDirectionLeft : CBFlipDirectionRight);
-    self.flipViewTransition.duration = 2.5f;
+    self.flipViewTransition.duration = 1.5f;
     
     __typeof__(self) __weak weakSelf = self;
     [self.flipViewTransition performTransitionWithCompletion:^{

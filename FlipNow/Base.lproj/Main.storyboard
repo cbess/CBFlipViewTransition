@@ -41,20 +41,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="9T6-o1-kvG">
-            <objects>
-                <viewController id="dAb-6q-33k" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="R9b-Fa-RK7">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="eJh-zk-ccs" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="816" y="-98"/>
-        </scene>
     </scenes>
     <resources>
         <image name="116-hub-logo" width="1024" height="1024"/>
