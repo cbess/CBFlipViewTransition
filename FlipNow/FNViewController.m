@@ -39,11 +39,7 @@
     
     __typeof__(self) __weak weakSelf = self;
     [self.flipViewTransition performTransitionWithCompletion:^{
-        if (!_flipped) {
-            weakSelf.oneImageView.hidden = YES;
-        } else {
-            weakSelf.twoImageView.hidden = YES;
-        }
+        weakSelf.flipViewTransition.frontView.hidden = YES;
         
         _flipped = !_flipped;
     }];
