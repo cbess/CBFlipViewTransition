@@ -6,7 +6,7 @@
 
 #import "CBFlipViewTransition.h"
 
-@interface CBFlipViewTransition () {
+@interface CBFlipViewTransition () <CAAnimationDelegate> {
     CALayer *_frontLayer;
     CALayer *_backLayer;
 }
@@ -27,14 +27,14 @@
 
 - (void)performTransitionWithCompletion:(dispatch_block_t)completion {
     self.completion = completion;
-    
+
     /// setup the layers
-    
+
     CALayer *frontLayer = [CALayer layer];
     _frontLayer = frontLayer;
     CALayer *backLayer = [CALayer layer];
     _backLayer = backLayer;
-    
+
     // determine rotation, direction and set perspective
     NSString *rotationKeyPath = @"transform.rotation.y";
     CATransform3D perspective = CATransform3DIdentity;
@@ -44,14 +44,14 @@
         case CBFlipDirectionLeft:
             perspective.m34 = -1.f / self.zDistance;
             break;
-            
+
         case CBFlipDirectionUp:
             rotationKeyPath = @"transform.rotation.x";
         case CBFlipDirectionRight:
             perspective.m34 = 1.f / self.zDistance;
             break;
     }
-    
+
     // front
     self.frontView.hidden = NO; // show to get screenshot
     frontLayer.doubleSided = NO;
@@ -59,7 +59,7 @@
     frontLayer.position = self.frontView.center;
     frontLayer.contents = (id)[[self imageFromView:self.frontView force:NO] CGImage]; // should be on screen
     frontLayer.transform = perspective;
-    
+
     // back
     self.backView.hidden = NO;
     backLayer.doubleSided = NO;
@@ -67,15 +67,15 @@
     backLayer.position = self.frontView.center;
     backLayer.contents = (id)[[self imageFromView:self.backView force:YES] CGImage]; // may not be shown
     backLayer.transform = perspective;
-    
+
     [self.containerView.layer addSublayer:frontLayer];
     [self.containerView.layer addSublayer:backLayer];
-    
+
     self.frontView.hidden = YES;
     self.backView.hidden = YES;
-    
+
     /// setup the animations
-    
+
     NSMutableArray *animations = [NSMutableArray array];
     CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
     animationGroup.duration = self.duration;
@@ -101,7 +101,7 @@
     animationGroup.animations = animations;
     [frontLayer addAnimation:animationGroup forKey:@"cbflip"];
     [animations removeAllObjects];
-    
+
     // back
     // position
     CABasicAnimation *backAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
@@ -124,15 +124,17 @@
     [animations removeAllObjects];
 }
 
+#pragma mark - CAAnimationDelegate
+
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     if (self.removeOnCompletion) {
         [_frontLayer removeFromSuperlayer];
         [_backLayer removeFromSuperlayer];
     }
-    
+
     self.frontView.hidden = NO;
     self.backView.hidden = NO;
-    
+
     if (self.completion) {
         self.completion();
     }
@@ -142,16 +144,16 @@
 
 - (UIImage *)imageFromView:(UIView *)view force:(BOOL)force {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, 0);
-    
+
     if (!force && [view respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
         [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
     } else {
         [view.layer renderInContext:UIGraphicsGetCurrentContext()];
     }
-    
+
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    
+
     return image;
 }
 
